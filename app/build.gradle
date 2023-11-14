@@ -1,6 +1,5 @@
-plugins {
-    id 'com.android.application'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'  // apply plugin
 
 android {
     namespace 'com.asuer.accounttime'
@@ -26,6 +25,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    greendao {
+        schemaVersion 1 // 数据库版本号
+        daoPackage 'com.asuer.accounttime.greendao.Dao'  // 设置 DaoMaster、DaoSession、Dao 包名
+        targetGenDir 'src/main/java'  // 设置 DaoMaster、DaoSession、Dao 目录
+    }
 }
 
 dependencies {
@@ -37,4 +42,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    implementation 'org.greenrobot:greendao:3.3.0'  // add library
 }
