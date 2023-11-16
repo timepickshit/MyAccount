@@ -13,4 +13,10 @@
         android:id="@+id/bt_async"
         android:text="异步请求"></Button>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_add_account"
+        android:text="添加消费"></Button>
+
 </LinearLayout>

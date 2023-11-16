@@ -13,18 +13,31 @@ public class accountManager {
 
     private volatile static accountManager mInstance = null;
     private Context mContext;
-    private accountStroge mAccountStroge;
-    private DaoMaster.DevOpenHelper mAccountHelper;
-    private SQLiteDatabase mAccount_db;
-    private DaoMaster mAccountDaoMaster;
-    private DaoSession mAccountSession;
-    private AccountDao mAccountDao;
+    private static accountStroge mAccountStroge;
+    private static DaoMaster.DevOpenHelper mAccountHelper;
+    private static SQLiteDatabase mAccount_db;
+    private static DaoMaster mAccountDaoMaster;
+    private static DaoSession mAccountSession;
+    private static AccountDao mAccountDao;
 
-    private accountManager (Context context) {
-        this.mContext = context;
+    private accountManager () {}
 
+    //设置单例
+    public static synchronized accountManager getmInstance(Context context) {
+        if (mInstance == null) {
+            synchronized (accountManager.class) {
+                if (mInstance == null) {
+                    mInstance = new accountManager();
+                    CreatDb(context);
+                }
+            }
+        }
+        return mInstance;
+    }
+
+    private static void CreatDb(Context context) {
         // 生成数据库文件，名为 account_db
-        mAccountHelper = new accountDBopenHelper(mContext, "account.db", null);
+        mAccountHelper = new accountDBopenHelper(context, "account.db", null);
         mAccount_db = mAccountHelper.getWritableDatabase();
         // 建立特定模式下的所有的 DAO 对象和数据 db 对象的映射
         mAccountDaoMaster = new DaoMaster(mAccount_db);
@@ -33,20 +46,7 @@ public class accountManager {
         // 得到指定的 StudentDao 对象
         mAccountDao = mAccountSession.getAccountDao();
 
-
         mAccountStroge = new accountStroge(mAccountDao);
-    }
-
-    //设置单例
-    public static accountManager getmInstance(Context context) {
-        if (mInstance == null) {
-            synchronized (accountManager.class) {
-                if (mInstance == null) {
-                    mInstance = new accountManager(context);
-                }
-            }
-        }
-        return mInstance;
     }
 
     public Account getAccountById (long id) {

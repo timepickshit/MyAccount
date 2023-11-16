@@ -111,7 +111,7 @@ public class accountStroge {
      * @param Type 类型号
      * @return 此类型所有数据
      */
-    public synchronized List<Account> SelectAccountByType(int Type){
+    public List<Account> SelectAccountByType(int Type){
         List<Account> AccountList = mAccountDao.queryBuilder()
                 .where(AccountDao.Properties.Pay_type.eq(Type)).list();
         return AccountList;
@@ -122,7 +122,7 @@ public class accountStroge {
      * @param Source 来源编号
      * @return 此类型所有数据
      */
-    public synchronized List<Account> SelectAccountBySource(int Source){
+    public List<Account> SelectAccountBySource(int Source){
         List<Account> AccountList = mAccountDao.queryBuilder()
                 .where(AccountDao.Properties.Pay_source.eq(Source)).list();
         return AccountList;
