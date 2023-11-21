@@ -81,6 +81,7 @@
             android:textSize="15dp"
             android:paddingLeft="10dp"
             android:inputType="numberDecimal"
+            android:imeOptions="actionDone"
             android:background="@drawable/add_account_edit_shape"/>
     </LinearLayout>
 

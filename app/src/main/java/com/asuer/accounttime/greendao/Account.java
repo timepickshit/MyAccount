@@ -86,7 +86,16 @@ public class Account {
         this.Pay_notes = Pay_notes;
     }
 
-   
 
-
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", pay_type=" + pay_type +
+                ", pay_source=" + pay_source +
+                ", pay_money=" + pay_money +
+                ", pay_time=" + pay_time +
+                ", Pay_notes='" + Pay_notes + '\'' +
+                '}';
+    }
 }

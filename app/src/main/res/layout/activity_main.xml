@@ -19,4 +19,10 @@
         android:id="@+id/bt_add_account"
         android:text="添加消费"></Button>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_load_all_account"
+        android:text="查看所有消费"/>
+
 </LinearLayout>

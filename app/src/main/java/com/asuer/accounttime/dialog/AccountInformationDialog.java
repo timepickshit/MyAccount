@@ -5,24 +5,27 @@ package com.asuer.accounttime.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.asuer.accounttime.R;
 import com.asuer.accounttime.greendao.Account;
+import com.asuer.accounttime.greendao.accountManager;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AccountInformationDialog {
 
@@ -30,9 +33,13 @@ public class AccountInformationDialog {
 
     private Account mAccount;
 
+    private accountManager mAccountManager;
+
     public AccountInformationDialog(Context context) {
         this.mContext = context;
         mAccount = new Account();
+
+        mAccountManager = accountManager.getmInstance(mContext);
     }
 
     public void ShowAddAccountDialog() {
@@ -68,8 +75,33 @@ public class AccountInformationDialog {
         tv_confirm_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "确定添加", Toast.LENGTH_SHORT).show();
-                addAlerdialog.dismiss();
+
+                if (!et_paytype.getText().toString().isEmpty() && !et_paysource.getText().toString().isEmpty()
+                        && !et_paymoney.getText().toString().isEmpty() && !et_paytime.getText().toString().isEmpty()) {
+                    Toast.makeText(mContext, "确定添加", Toast.LENGTH_SHORT).show();
+                    float money = Float.parseFloat(et_paymoney.getText().toString());
+                    mAccount.setPay_money(money);
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    try {
+                        Date date = dateFormat.parse(et_paytime.getText().toString());
+                        mAccount.setPay_time(date);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    String notes = et_pay_notes.getText().toString();
+                    mAccount.setPay_notes(notes);
+
+                    Log.e("TAG", mAccount.toString());
+
+                    mAccountManager.addAccount(mAccount);
+
+                    addAlerdialog.dismiss();
+                } else {
+                    Toast.makeText(mContext, "消费信息不全", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -110,12 +142,15 @@ public class AccountInformationDialog {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     et_paytime.setInputType(InputType.TYPE_NULL); // 设置输入类型为空
                     et_paytime.onTouchEvent(motionEvent); // 处理触摸事件
-                    showTimePickerPopup(et_paytime);
+                    showDateTimePickerPopup(et_paytime);
                     return true; // 返回 true 消费触摸事件
                 }
                 return false;
             }
         });
+
+
+
 
     }
 
@@ -246,8 +281,13 @@ public class AccountInformationDialog {
 
     }
 
+    private NumberPicker yearPicker;
+    private NumberPicker monthPicker;
+    private NumberPicker dayPicker;
+    private NumberPicker hourPicker;
+    private NumberPicker minutePicker;
 
-    private void showTimePickerPopup(EditText editText) {
+    private void showDateTimePickerPopup(EditText editText) {
         // 创建布局填充器
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.popup_account_time, null);
@@ -259,41 +299,72 @@ public class AccountInformationDialog {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 true
         );
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
+        popupWindow.showAsDropDown(editText); // 显示在EditText下方
 
-        // 设置日期选择器的初始日期
+        // 获取当前年份和月份
         Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH) + 1; // 月份从 0 开始
+        int crrentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int Day;
+        //判断是否闰年
+        if (currentYear % 4 == 0 && currentYear % 100 != 0) {
+            Day = 31;
+        } else if (currentYear % 400 == 0) {
+            Day = 31;
+        } else {
+            Day = 30;
+        }
 
-        // 初始化 DatePicker
-        DatePicker datePicker = popupView.findViewById(R.id.datePicker);
-        datePicker.init(year, month, dayOfMonth, null);
+//        Log.e("TAG", "///" + currentYear + "年" + currentMonth + "月" + crrentDay + "日" + "///   一个月有" + Day + "天");
 
-        // 设置时间选择器的初始时间
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
+        // 初始化天选择器
+        yearPicker = popupView.findViewById(R.id.yearpicker);
+        yearPicker.setMaxValue(currentYear + 10);
+        yearPicker.setMinValue(currentYear - 10);
 
-        // 初始化 TimePicker
-        TimePicker timePicker = popupView.findViewById(R.id.timePicker);
-        timePicker.setIs24HourView(true);
-        timePicker.setCurrentHour(hour);
-        timePicker.setCurrentMinute(minute);
+        // 初始化天选择器
+        monthPicker = popupView.findViewById(R.id.monthpicker);
+        monthPicker.setMaxValue(12);
+        monthPicker.setMinValue(1);
+
+        // 初始化天选择器
+        dayPicker = popupView.findViewById(R.id.daypicker);
+        dayPicker.setMaxValue(Day);
+        dayPicker.setMinValue(1);
+
+        yearPicker.setValue(currentYear);
+        monthPicker.setValue(currentMonth);
+        dayPicker.setValue(crrentDay);
+
+        // 初始化小时选择器
+        hourPicker = popupView.findViewById(R.id.hourpicker);
+        hourPicker.setMinValue(0);
+        hourPicker.setMaxValue(23);
+
+        // 初始化分钟选择器
+        minutePicker = popupView.findViewById(R.id.minutepicker);
+        minutePicker.setMinValue(0);
+        minutePicker.setMaxValue(59);
 
         // 设置确定按钮的点击事件
-        Button btnDone = popupView.findViewById(R.id.btnDone);
+        Button btnDone = popupView.findViewById(R.id.btndone);
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 处理选择的日期和时间，这里可以更新 EditText 或执行其他操作
-                int selectedYear = datePicker.getYear();
-                int selectedMonth = datePicker.getMonth();
-                int selectedDayOfMonth = datePicker.getDayOfMonth();
-                int selectedHour = timePicker.getCurrentHour();
-                int selectedMinute = timePicker.getCurrentMinute();
+                int selectedYear = yearPicker.getValue();
+                int selectedMonth = monthPicker.getValue();
+                int selectedDay = dayPicker.getValue();
+                int selectedHour = hourPicker.getValue();
+                int selectedMinute = minutePicker.getValue();
+
+
 
                 String selectedDateTime = String.format("%04d-%02d-%02d %02d:%02d",
-                        selectedYear, selectedMonth + 1, selectedDayOfMonth, selectedHour, selectedMinute);
+                        selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute);
 
                 editText.setText(selectedDateTime);
 
@@ -303,7 +374,7 @@ public class AccountInformationDialog {
         });
 
         // 设置取消按钮的点击事件
-        Button btnCancel = popupView.findViewById(R.id.btnCancel);
+        Button btnCancel = popupView.findViewById(R.id.btncancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
