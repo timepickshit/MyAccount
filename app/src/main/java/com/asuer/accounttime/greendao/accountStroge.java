@@ -18,17 +18,19 @@ import java.util.List;
 public class accountStroge {
 
     private AccountDao mAccountDao; // 获取 dao 对象
+    QueryBuilder<Account> queryBuilder;
 
 
     accountStroge(AccountDao mAccountDao) {
         this.mAccountDao = mAccountDao;
+        queryBuilder = mAccountDao.queryBuilder();
     }
 
     public Account getAccountById (long id) {
         if (!isDataBaseValid()){
             return null;
         }
-        return mAccountDao.queryBuilder().where(AccountDao.Properties.Id.eq(id)).unique();
+        return queryBuilder.where(AccountDao.Properties.Id.eq(id)).unique();
     }
 
     /**
@@ -128,6 +130,14 @@ public class accountStroge {
         return AccountList;
     }
 
+
+
+    public Account GetLastAccount () {
+        queryBuilder.orderDesc(AccountDao.Properties.Id);
+        queryBuilder.limit(1);
+        Account account = queryBuilder.unique();
+        return account;
+    }
 
 
 

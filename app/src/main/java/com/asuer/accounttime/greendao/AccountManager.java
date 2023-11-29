@@ -9,9 +9,9 @@ import com.asuer.accounttime.greendao.Dao.DaoSession;
 
 import java.util.List;
 
-public class accountManager {
+public class AccountManager {
 
-    private volatile static accountManager mInstance = null;
+    private volatile static AccountManager mInstance = null;
     private Context mContext;
     private static accountStroge mAccountStroge;
     private static DaoMaster.DevOpenHelper mAccountHelper;
@@ -20,14 +20,14 @@ public class accountManager {
     private static DaoSession mAccountSession;
     private static AccountDao mAccountDao;
 
-    private accountManager () {}
+    private AccountManager() {}
 
     //设置单例
-    public static synchronized accountManager getmInstance(Context context) {
+    public static synchronized AccountManager getmInstance(Context context) {
         if (mInstance == null) {
-            synchronized (accountManager.class) {
+            synchronized (AccountManager.class) {
                 if (mInstance == null) {
-                    mInstance = new accountManager();
+                    mInstance = new AccountManager();
                     CreatDb(context);
                 }
             }
@@ -80,6 +80,12 @@ public class accountManager {
         return mAccount;
     }
 
+
+
+    public Account GetLastAccount() {
+        Account account = mAccountStroge.GetLastAccount();
+        return account;
+    }
 
 
 

@@ -3,6 +3,7 @@ package com.asuer.accounttime.greendao;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -54,12 +55,65 @@ public class Account {
         this.pay_type = pay_type;
     }
 
+    public String getPay_type_str() {
+        String str = new String();
+        switch (this.pay_type) {
+            case 1:
+                //银行卡
+                str = "银行卡";
+                break;
+
+            case 2:
+                //支付宝
+                str = "支付宝";
+                break;
+
+            case 3:
+                //微信
+                str = "微信";
+                break;
+
+            case 4:
+                //信用卡
+                str = "信用卡";
+                break;
+
+            case 5:
+                //其他
+                str = "其他";
+                break;
+        }
+        return str;
+    }
+
     public int getPay_source() {
         return this.pay_source;
     }
 
     public void setPay_source(int pay_source) {
         this.pay_source = pay_source;
+    }
+
+    public String getPay_source_str() {
+        String str = new String();
+        switch (getPay_source()) {
+            case 1:
+                str = "日常饮食";
+                break;
+
+            case 2:
+                str = "娱乐活动";
+                break;
+
+            case 3:
+                str = "房租水电";
+                break;
+
+            case 4:
+                str = "其他项目";
+                break;
+        }
+        return str;
     }
 
     public float getPay_money() {
@@ -76,6 +130,12 @@ public class Account {
 
     public void setPay_time(Date pay_time) {
         this.pay_time = pay_time;
+    }
+
+    public String getPay_time_str() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = getPay_time();
+        return dateFormat.format(date);
     }
 
     public String getPay_notes() {

@@ -1,28 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-
-    <Button
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bt_async"
-        android:text="异步请求"></Button>
+        android:orientation="vertical">
 
-    <Button
+        <Button
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bt_async"
+            android:text="异步请求"></Button>
+
+
+
+        <Button
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/bt_load_all_account"
+            android:text="查看所有消费"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/homepage_shape">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@drawable/homepage_left_banyuan"
+                android:tintMode="src_atop" />
+
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/homepage_right_banyuan"
+                android:tintMode="src_atop" />
+
+
+            <TextView
+                android:text="首页"
+                android:textSize="20sp"
+                android:layout_marginTop="35dp"
+                android:gravity=""
+                android:layout_alignParentTop="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="87dp"
+                android:background="@drawable/homepage_line"
+                android:backgroundTintMode="src_atop"
+                android:clipToOutline="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="总资产(元)"
+                    android:textSize="10sp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:drawableRight="@drawable/check_eye_visible"
+                    android:text="********"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:text="本月支出(元)"
+                            android:textSize="10sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:text="********"
+                            android:textSize="20sp"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:text="预算剩余(元)"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:text="********"
+                            android:textSize="20sp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="25dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+
+        <ListView
+            android:id="@+id/lv_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="80dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:divider="@null" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"/>
+
+    </LinearLayout>
+
+
+
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bt_add_account"
-        android:text="添加消费"></Button>
+        android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bt_load_all_account"
-        android:text="查看所有消费"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="75dp"
+            android:background="#C4C4C4" />
 
-</LinearLayout>
+        <RadioGroup
+            android:id="@+id/tabs_rg"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_alignParentBottom="true"
+            android:background="#ffffff"
+            android:orientation="horizontal">
+
+
+            <RadioButton
+                android:id="@+id/rbt_check_homepage"
+                style="@style/Custom.TabRadioButton"
+                android:checked="true"
+                android:drawableTop="@drawable/check_homepage"
+                android:text="首页" />
+
+            <RadioButton
+                android:id="@+id/rbt_check_bill"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/check_bill"
+                android:text="明细" />
+
+
+            <View style="@style/Custom.TabRadioButton" />
+
+
+            <RadioButton
+                android:id="@+id/rbt_check_table"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/check_table"
+                android:text="报表" />
+
+            <RadioButton
+                android:paddingTop="5dp"
+                android:id="@+id/rbt_check_user"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/check_user"
+                android:text="我的" />
+
+        </RadioGroup>
+
+        <ImageView
+            android:id="@+id/iv_add_account"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:paddingBottom="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/green_plus" />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.asuer.accounttime.R;
 import com.asuer.accounttime.greendao.Account;
-import com.asuer.accounttime.greendao.accountManager;
+import com.asuer.accounttime.greendao.AccountManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,19 +33,22 @@ public class AccountInformationDialog {
 
     private Account mAccount;
 
-    private accountManager mAccountManager;
+    private AccountManager mAccountManager;
 
     public AccountInformationDialog(Context context) {
         this.mContext = context;
         mAccount = new Account();
 
-        mAccountManager = accountManager.getmInstance(mContext);
+        mAccountManager = AccountManager.getmInstance(mContext);
     }
 
     public void ShowAddAccountDialog() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext,R.style.add_account_dialog_style);
         View mView = View.inflate(mContext, R.layout.dialog_add_account, null);
+
+        Account account1 = mAccountManager.GetLastAccount();
+        long id1 = account1.getId();
 
         final EditText et_paytype = mView.findViewById(R.id.et_paytype);
 //        et_paytype.setInputType(InputType.TYPE_NULL);
@@ -86,6 +89,7 @@ public class AccountInformationDialog {
                     try {
                         Date date = dateFormat.parse(et_paytime.getText().toString());
                         mAccount.setPay_time(date);
+
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
@@ -93,9 +97,13 @@ public class AccountInformationDialog {
                     String notes = et_pay_notes.getText().toString();
                     mAccount.setPay_notes(notes);
 
+                    mAccount.setId(id1+1);
+
                     Log.e("TAG", mAccount.toString());
 
                     mAccountManager.addAccount(mAccount);
+
+
 
                     addAlerdialog.dismiss();
                 } else {
